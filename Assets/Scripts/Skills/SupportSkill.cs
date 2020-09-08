@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-namespace Pokemon
-{
-    public enum ESupportSkill {AtkUp, DefUp, SpdDown}
+public enum ESupportSkill {AtkUp, DefUp, SpdDown}
 
     public class SupportSkill : Skill
     {
@@ -50,4 +51,4 @@ namespace Pokemon
             }            
         }
     }
-}
+

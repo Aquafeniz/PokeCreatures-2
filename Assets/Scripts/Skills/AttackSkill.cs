@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
+using UnityEngine;
 
-namespace Pokemon
-{
-    public class AttackSkill : Skill
+public class AttackSkill : Skill
     {
         private float multiplier;
         public AttackSkill(string _name, EAffinity _affinity, float _power)
@@ -25,6 +25,7 @@ namespace Pokemon
                 Console.WriteLine("El skill de ataque '{0}' no puede tener poder mayor a 10, por lo tanto el poder será 10.", _name);
             }
         }
+
 
         public override void UseSkill(Critter target)
         {
@@ -138,4 +139,4 @@ namespace Pokemon
             }
         }
     }
-}
+

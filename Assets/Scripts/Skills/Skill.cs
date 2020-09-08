@@ -3,27 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
+using UnityEngine;
 
-namespace Pokemon
-{
-    public enum ESkillType { AttackSkill, SupportSkill}
 
-    public abstract class Skill
+
+public enum ESkillType { AttackSkill, SupportSkill}
+
+    public abstract class Skill : MonoBehaviour
     {
-        public Critter myCritter;
+        //public Critter myCritter;
         public EAffinity affinity;
         //public ESkillType skillType;
+
         public string Name { get; protected set; }
         public float Power { get; protected set; }
         public float DamageValue { get; protected set; }
 
 
-        public Skill(string _name, EAffinity _affinity, float _power, Critter critter)
+        public Skill(string _name, EAffinity _affinity, float _power /*, Critter critter*/)
         {
             Name = _name;
             affinity = _affinity;
             Power = _power;
-            myCritter = critter;
+            //myCritter = critter;
         }
 
         public Skill()
@@ -34,4 +37,4 @@ namespace Pokemon
         {
         }
     }
-}
+

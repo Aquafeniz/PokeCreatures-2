@@ -3,34 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-namespace Pokemon
-{
+using System.Collections;
+using UnityEngine;
     public enum EAffinity { Fire, Wind, Water, Earth, Dark, Light}
 
-    public class Critter
+public class Critter : MonoBehaviour
+{
+    public string Name; // { get; protected set; } //
+   
+    [Header("Base")]
+    public float BaseAttack;// { get; }
+    public float BaseDefense;// { get; }
+    public float BaseSpeed;// { get; protected set; }
+    public EAffinity affinity;
+
+    #region Hide Atribbutes
+    public float RealAttack { get; set; }
+    public float AffinityMultiplier { get; }
+    public float DefenseValue { get; set; }
+    public float RealDefense { get; set; }
+    public float SpeedValue { get; set; }
+    public float RealSpeed { get; set; }
+
+    #endregion
+
+    public List<Skill> moveSet = new List<Skill>(); //
+
+    [Header("UpSkill")]
+    public int atkUpSkill;
+    public int defUpSkill;
+    public int spdDownSkill;
+
+    [Header("Battle")]
+    public float HP;
+    public bool isDefeated = false;
+
+    public Critter(string _name, float _baseAtk, float _baseDef, float _baseSpd, EAffinity _affinity, float _hp, List<Skill> _skills)
     {
-        public EAffinity affinity;
-        public string Name { get; protected set; }
-        public float BaseAttack { get; }
-        public float RealAttack { get; set; }
-        public float AffinityMultiplier { get; }
-        public float BaseDefense { get; }
-        public float DefenseValue { get; set; }
-        public float RealDefense { get; set; }
-        public float BaseSpeed { get; protected set; }
-        public float SpeedValue { get; set; }
-        public float RealSpeed { get; set; }
-        public List<Skill> moveSet = new List<Skill>();
-        public int atkUpSkill;
-        public int defUpSkill;
-        public int spdDownSkill;
-
-        public float HP;
-        public bool isDefeated = false;
-
-        public Critter(string _name, float _baseAtk, float _baseDef, float _baseSpd, EAffinity _affinity, float _hp, List<Skill> _skills)
-        {
             Name = _name;
             BaseAttack = _baseAtk;
             if (BaseAttack > 100)
@@ -75,14 +84,14 @@ namespace Pokemon
             {
                 s.myCritter = this;
             }
-        }
+    }
 
-        public Critter()
-        {
-        }
+    public Critter()
+    {
+    }
 
-        public void TakeDamage(float damage)
-        {
+    public void TakeDamage(float damage)
+    {
             HP -= damage;
             Console.WriteLine("{0} recibe {1} puntos de daño!", Name, damage);
             if (HP <= 0)
@@ -90,8 +99,8 @@ namespace Pokemon
                 Console.WriteLine("{0} ha muerto. :(", Name);
                 isDefeated = true;
             }
-        }
-
-
     }
+
+
 }
+
