@@ -1176,7 +1176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d66356069a416d41a090beec462d3f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myCritter: {fileID: 0}
+  myCritter: {fileID: 620670826}
   affinity: 3
   supportSkill: 2
 --- !u!4 &1148823500
@@ -1377,7 +1377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d66356069a416d41a090beec462d3f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myCritter: {fileID: 0}
+  myCritter: {fileID: 260311514}
   affinity: 0
   supportSkill: 1
 --- !u!4 &1524131929
