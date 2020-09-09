@@ -12,29 +12,21 @@ public enum ESkillType { AttackSkill, SupportSkill}
 
     public abstract class Skill : MonoBehaviour
     {
-        public Critter myCritter;
+        [HideInInspector] public Critter myCritter;
         public EAffinity affinity;
+        public int suportSkillUsed;
+
         //public ESkillType skillType;
 
-        public string Name { get; protected set; }
-        public float Power { get; protected set; }
+        public string Name;
+        public abstract float Power {get; set;}
         public float DamageValue { get; protected set; }
 
-
-        public Skill(string _name, EAffinity _affinity, float _power , Critter critter)
+        void Start()
         {
-            Name = _name;
-            affinity = _affinity;
-            Power = _power;
-            myCritter = critter;
+            myCritter = GetComponentInParent<Critter>();        
         }
 
-        public Skill()
-        {
-        }
-
-        public virtual void UseSkill(Critter target)
-        {
-        }
+        public abstract void UseSkill(Critter target);
     }
 

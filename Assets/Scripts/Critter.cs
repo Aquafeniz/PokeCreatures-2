@@ -12,9 +12,9 @@ public class Critter : MonoBehaviour
     public string Name; // { get; protected set; } //
    
     [Header("Base")]
-    public float BaseAttack;// { get; }
-    public float BaseDefense;// { get; }
-    public float BaseSpeed;// { get; protected set; }
+    [Range(10,100)] public float BaseAttack;// { get; }
+    [Range(10, 100)] public float BaseDefense;// { get; }
+    [Range(1, 50)] public float BaseSpeed;// { get; protected set; }
     public EAffinity affinity;
 
     #region Hide Atribbutes
@@ -29,66 +29,20 @@ public class Critter : MonoBehaviour
 
     public List<Skill> moveSet = new List<Skill>(); //
 
-    [Header("UpSkill")]
-    public int atkUpSkill;
-    public int defUpSkill;
-    public int spdDownSkill;
+    [HideInInspector] public int atkUpSkill;
+    [HideInInspector] public int defUpSkill;
+    [HideInInspector] public int spdDownSkill;
 
     [Header("Battle")]
-    public float HP;
+    [Range(10, 500)]public float HP;
     public bool isDefeated = false;
 
-    public Critter(string _name, float _baseAtk, float _baseDef, float _baseSpd, EAffinity _affinity, float _hp, List<Skill> _skills)
+    void Start()
     {
-            Name = _name;
-            BaseAttack = _baseAtk;
-            if (BaseAttack > 100)
-            {
-                BaseAttack = 100;
-                Console.WriteLine("'{0}' no puede tener ataque mayor a 100, por lo tanto el ataque será 100.", _name);
-            }
-            if (BaseAttack < 10) 
-            {
-                BaseAttack = 10;
-                Console.WriteLine("'{0}' no puede tener ataque menor a 10, por lo tanto el ataque será 10.", _name);
-            }
-            RealAttack = BaseAttack;
-            BaseDefense = _baseDef;
-            if (BaseDefense > 100) 
-            {
-                BaseDefense = 100;
-                Console.WriteLine("'{0}' no puede tener defensa mayor a 100, por lo tanto el defensa será 100.", _name);
-            }
-            if (BaseDefense < 10) 
-            {
-                BaseDefense = 10;
-                Console.WriteLine("'{0}' no puede tener defensa menor a 10, por lo tanto el defensa será 10.", _name);
-            }
-            RealDefense = BaseDefense;
-            BaseSpeed = _baseSpd;
-            if (BaseSpeed > 50) 
-            {
-                BaseSpeed = 50;
-                Console.WriteLine("'{0}' no puede tener velocidad mayor a 50, por lo tanto el velocidad será 50.", _name);
-            }
-            if (BaseSpeed < 1)
-            {
-                BaseSpeed = 1;
-                Console.WriteLine("'{0}' no puede tener velocidad menor a 1, por lo tanto el velocidad será 1.", _name);
-            }
-            RealSpeed = BaseSpeed;
-            affinity = _affinity;
-            HP = _hp;
-            moveSet = _skills;
-            foreach (Skill s in moveSet)
-            {
-                s.myCritter = this;
-            }
-    }
-
-    public Critter()
-    {
-    }
+        RealAttack = BaseAttack;
+        RealDefense = BaseDefense;
+        RealSpeed = BaseSpeed;
+    }   
 
     public void TakeDamage(float damage)
     {

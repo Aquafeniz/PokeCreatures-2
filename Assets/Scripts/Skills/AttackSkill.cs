@@ -8,7 +8,15 @@ using UnityEngine;
 
 public class AttackSkill : Skill
     {
+        public override float Power {get; set; }
+        [Range(1,10)] public float power;
         private float multiplier;
+
+        void Start()
+        {
+            Power = power;
+        }
+
         public AttackSkill(string _name, EAffinity _affinity, float _power)
         {
             Name = _name;
