@@ -188,7 +188,7 @@ MonoBehaviour:
   affinity: 5
   suportSkillUsed: 0
   Name: Anti Piratadas
-  power: 5
+  power: 10
 --- !u!1 &5008479177897583991
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,7 +285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Danielito
-  BaseAttack: 30
+  BaseAttack: 10
   BaseDefense: 100
   BaseSpeed: 25
   affinity: 5
@@ -296,5 +296,6 @@ MonoBehaviour:
   atkUpSkill: 0
   defUpSkill: 0
   spdDownSkill: 0
-  HP: 300
+  maxHP: 200
+  currentHP: 0
   isDefeated: 0

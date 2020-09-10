@@ -152,7 +152,8 @@ MonoBehaviour:
   atkUpSkill: 0
   defUpSkill: 0
   spdDownSkill: 0
-  HP: 175
+  maxHP: 220
+  currentHP: 0
   isDefeated: 0
 --- !u!1 &4672206386316770006
 GameObject:

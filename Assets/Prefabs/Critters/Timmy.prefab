@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Timmy
-  BaseAttack: 10
+  BaseAttack: 75
   BaseDefense: 0
   BaseSpeed: 15
   affinity: 3
@@ -152,7 +152,8 @@ MonoBehaviour:
   atkUpSkill: 0
   defUpSkill: 0
   spdDownSkill: 0
-  HP: 200
+  maxHP: 150
+  currentHP: 0
   isDefeated: 0
 --- !u!1 &8981301892950219268
 GameObject:

@@ -22,15 +22,9 @@ public class Player : MonoBehaviour
             Name = _name;
             foreach (GameObject critter in battleCritter)
             {
-                critterStack.Push(critter);                
+                critterStack.Push(critter);    
+                collection.Add(critter.GetComponent<Critter>());
             }
         }
-
-        // public Player(List<Critter> critters, string _name)
-        // {
-        //     Name = _name;
-        //     battleCritter = critters;
-        //     collection = critters;
-        // }
     }
 

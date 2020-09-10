@@ -4,8 +4,10 @@ using UnityEngine;
 
 public enum BattleState { Start, PlayerTurn, EnemyTurn, Won, Lost }
 
-public class BattleSystem : MonoBehaviour
+public class BattleSystem : MonoBehaviour, ISubject
 {
+    [SerializeField]public List<IObserver> _observers = new List<IObserver>();
+
     [SerializeField] Player player;
     [SerializeField] Player enemy;
 
@@ -23,75 +25,83 @@ public class BattleSystem : MonoBehaviour
     {
         playerCritterStack = player.critterStack;
         enemyCritterStack = enemy.critterStack;
+        RegisterObserver(HUDSystem.Instance.GetComponent<IObserver>());
         SetupBattle();
+        
+    }
+
+    public void RegisterObserver(IObserver observer) //Se suscriben los observadores interesados
+    {
+        _observers.Add(observer);
     }
 
     void SetupBattle()
     {
-        Debug.Log("Iniciando batalla");
         state = BattleState.Start;
         playerCritter = playerCritterStack.Pop().GetComponent<Critter>();
-        enemyCritter = enemyCritterStack.Pop().GetComponent<Critter>();
+        enemyCritter = enemyCritterStack.Pop().GetComponent<Critter>();        
 
         playerCritter = Instantiate(playerCritter, playerBattlePos);
         enemyCritter = Instantiate(enemyCritter, enemyBattlePos);
 
-        //Actualizar HUD
+        Notify("Ha comenzado la batalla", NotificationType.UpdateStatus);
+        Invoke("CritterStatsChange", 0.5f);
+        if (playerCritter.RealSpeed > enemyCritter.RealSpeed) PlayerTurn();
+        else StartCoroutine("EnemyTurn");
 
         state = BattleState.PlayerTurn;
-        PlayerTurn();
-
+        //PlayerTurn();
     }
 
     void PlayerTurn()
     {
-        BattleHUD.Instance.EnableButtons();
-        Debug.Log("Turno del jugador");
+        Notify(player, NotificationType.PlayerTurn);
         state = BattleState.PlayerTurn;
-
-
-        //Actualizar HUD
-        //Notificar Observer de que es el turno del player
     }
 
     IEnumerator EnemyTurn()
     {
-        BattleHUD.Instance.DisableButtons();
+        Notify(enemy, NotificationType.EnemyTurn);
         state = BattleState.EnemyTurn;
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2.5f);
         EnemyAction();
-        Debug.Log("Turno del enemigo");
-
     }
 
     void PlayerAction(int i)
-    {
+    {        
         Skill currentSkill = playerCritter.moveSet[i];
-        //Debug.Log(playerCritter.RealAttack);
 
         if (currentSkill as SupportSkill)
         {
             if (currentSkill.suportSkillUsed < 3)
             {
-                Debug.LogWarning(playerCritter.Name + " utiliza " + playerCritter.moveSet[i].Name);
                 playerCritter.moveSet[i].UseSkill(enemyCritter);
-                //Notificar observer para que bloquee el boton
+                StatusChange(playerCritter, currentSkill);
+                
             }
-            else Debug.LogError(playerCritter.Name + " no puede utilizar más esa habilidad.");
+            if (currentSkill.suportSkillUsed == 3 && i == 1)
+            {
+                Notify(currentSkill, i, NotificationType.UpdateHUD);
+            } 
+            else if (currentSkill.suportSkillUsed == 3 && i == 2)
+            {
+                Notify(currentSkill, i, NotificationType.UpdateHUD);
+            }
         }        
         else 
         {
-            Debug.Log(playerCritter.Name + " utiliza " + playerCritter.moveSet[i].Name);
             currentSkill.UseSkill(enemyCritter);
-            Debug.Log($"{playerCritter.Name} hace {currentSkill.DamageValue} de daño");
+            StatusChange(playerCritter, currentSkill);
         }
 
         if (enemyCritter.isDefeated)
         {
+            Critter oldCritter = enemyCritter;
             if (enemyCritterStack.Count > 0)
             {
                 Destroy(enemyCritter.gameObject);
-                NextEnemyCritter();                
+                NextEnemyCritter();       
+                Notify(oldCritter, enemyCritter, NotificationType.CritterDeath);    
                 StartCoroutine(EnemyTurn());
             }
             else
@@ -102,38 +112,43 @@ public class BattleSystem : MonoBehaviour
         else 
         {
             StartCoroutine(EnemyTurn());
-        } 
+        }
+        CritterStatsChange(); 
     }
 
     void EnemyAction()
     {
         int i = Random.Range(0, 3);
-        Skill currentSkill = enemyCritter.moveSet[i];
-        
+        Skill currentSkill = enemyCritter.moveSet[i];        
 
         if (currentSkill as SupportSkill)
         {
             if (currentSkill.suportSkillUsed < 3)
             {
-                Debug.LogWarning(enemyCritter.Name + " utiliza " + enemyCritter.moveSet[i].Name);
                 enemyCritter.moveSet[i].UseSkill(playerCritter);
+                StatusChange(enemyCritter, currentSkill);
             }
-            else Debug.LogError(enemyCritter.Name + " no puede utilizar más esa habilidad");
+            else EnemyAction();
         }        
         else 
         {
-            Debug.Log(enemyCritter.Name + " utiliza " + currentSkill.Name);
             currentSkill.UseSkill(playerCritter);
-            Debug.Log($"{enemyCritter.Name} hace {currentSkill.DamageValue} de daño");
+            StatusChange(enemyCritter, currentSkill);
         }
 
         if (playerCritter.isDefeated)
         {
+            Critter oldCritter = playerCritter;
+            enemy.collection.Add(playerCritter);
+            player.collection.Remove(playerCritter);
             if (playerCritterStack.Count > 0)
             {
+
                 Destroy(playerCritter.gameObject);
                 NextPlayerCritter();
-                PlayerTurn();
+                Notify(oldCritter, playerCritter, NotificationType.CritterDeath);         
+                
+                Invoke("PlayerTurn", 2f);
             }
             else
             {
@@ -142,8 +157,9 @@ public class BattleSystem : MonoBehaviour
         }
         else 
         {
-            PlayerTurn();
+            Invoke("PlayerTurn", 2f);
         }
+        CritterStatsChange();
 
     }
 
@@ -156,13 +172,15 @@ public class BattleSystem : MonoBehaviour
     {
         enemyCritter = enemyCritterStack.Pop().GetComponent<Critter>();
         enemyCritter = Instantiate(enemyCritter, enemyBattlePos);
+        Invoke("CritterStatsChange", 0.5f);
     }
 
     void NextPlayerCritter()
     {
         playerCritter = playerCritterStack.Pop().GetComponent<Critter>();
         playerCritter = Instantiate(playerCritter, playerBattlePos);
-
+        Notify(player, NotificationType.UpdateHUD);
+        Invoke("CritterStatsChange", 0.5f);
     }
 
     void BattleWon()
@@ -175,12 +193,33 @@ public class BattleSystem : MonoBehaviour
     {
         state = BattleState.Lost;
         Debug.Log(player.Name + " ha sido derrotado!");
+    }    
+
+    public void Notify(object value, NotificationType notificationType)
+    {
+        foreach(IObserver obs in _observers)
+        {
+            obs.OnNotify(value, notificationType);
+        }
     }
 
-    // void Update()
-    // {
-    //     Debug.Log("Critter actual: " + playerCritter.Name);
-    //     Debug.Log("Critters restantes: " + player.GetComponent<Player>().critterStack.Count);
-    // }
+    public void Notify(object value, object value2, NotificationType notificationType)
+    {
+        foreach(IObserver obs in _observers)
+        {
+            obs.OnNotify(value, value2, notificationType);
+        }
+    }
+
+    void StatusChange(Critter critter, Skill skill)
+    {
+        Notify(critter, skill, NotificationType.UpdateStatus);
+    }
+
+    void CritterStatsChange()
+    {
+        Notify(playerCritter, NotificationType.UpdatePlayerStats);
+        Notify(enemyCritter, NotificationType.UpdateEnemyStats);
+    }
 }
 

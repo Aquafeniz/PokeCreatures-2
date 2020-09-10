@@ -152,7 +152,8 @@ MonoBehaviour:
   atkUpSkill: 0
   defUpSkill: 0
   spdDownSkill: 0
-  HP: 150
+  maxHP: 125
+  currentHP: 0
   isDefeated: 0
 --- !u!1 &4113180594573274906
 GameObject:
@@ -199,6 +200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myCritter: {fileID: 4113180593456378366}
   affinity: 2
+  suportSkillUsed: 0
   Name: 
   power: 0
 --- !u!1 &4113180594995715645
@@ -246,6 +248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myCritter: {fileID: 4113180593456378366}
   affinity: 1
+  suportSkillUsed: 0
   Name: 
   power: 0
 --- !u!1 &4113180595058145630
@@ -293,5 +296,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myCritter: {fileID: 4113180593456378366}
   affinity: 3
+  suportSkillUsed: 0
   Name: 
   supportSkill: 2

@@ -34,7 +34,9 @@ public class Critter : MonoBehaviour
     [HideInInspector] public int spdDownSkill;
 
     [Header("Battle")]
-    [Range(10, 500)]public float HP;
+    [Range(10, 500)]public float maxHP;
+    public float currentHP;
+
     public bool isDefeated = false;
 
     void Start()
@@ -42,13 +44,15 @@ public class Critter : MonoBehaviour
         RealAttack = BaseAttack;
         RealDefense = BaseDefense;
         RealSpeed = BaseSpeed;
+        currentHP = maxHP;
+        //moveSet.Add(SkillFactory.CreateSuportSkill());
     }   
 
     public void TakeDamage(float damage)
     {
-            HP -= damage;
+            currentHP -= damage;
             Console.WriteLine("{0} recibe {1} puntos de daño!", Name, damage);
-            if (HP <= 0)
+            if (currentHP <= 0)
             {
                 Console.WriteLine("{0} ha muerto. :(", Name);
                 isDefeated = true;

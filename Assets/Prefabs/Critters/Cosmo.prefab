@@ -191,7 +191,7 @@ MonoBehaviour:
   Name: Cosmo
   BaseAttack: 10
   BaseDefense: 0
-  BaseSpeed: 15
+  BaseSpeed: 40
   affinity: 0
   moveSet:
   - {fileID: 9073686901435754638}
@@ -200,7 +200,8 @@ MonoBehaviour:
   atkUpSkill: 0
   defUpSkill: 0
   spdDownSkill: 0
-  HP: 200
+  maxHP: 150
+  currentHP: 0
   isDefeated: 0
 --- !u!1 &9073686901604566205
 GameObject:
