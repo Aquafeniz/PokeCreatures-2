@@ -40,18 +40,16 @@ public class BattleSystem : MonoBehaviour, ISubject
         playerCritter = playerCritterStack.Pop().GetComponent<Critter>();
         enemyCritter = enemyCritterStack.Pop().GetComponent<Critter>();        
 
+        if (playerCritter.BaseSpeed > enemyCritter.BaseSpeed) PlayerTurn();         
+        else StartCoroutine("EnemyTurn");
+
         playerCritter.transform.position = playerBattlePos.position;
         enemyCritter.transform.position = enemyBattlePos.position;
 
         Notify("Ha comenzado la batalla", NotificationType.UpdateStatus);
         Notify(this, NotificationType.UpdateHUD);
         Invoke("CritterStatsChange", 0.5f);
-        if (playerCritter.RealSpeed > enemyCritter.RealSpeed)
-        {
-            Debug.Log("Empieza el jugador");
-            PlayerTurn();
-        } 
-        else StartCoroutine("EnemyTurn");
+
 
         //state = BattleState.PlayerTurn;
     }
