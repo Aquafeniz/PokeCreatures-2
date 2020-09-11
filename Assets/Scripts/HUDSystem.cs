@@ -14,6 +14,7 @@ public class HUDSystem : MonoBehaviour, IObserver
     [SerializeField] Text playerCritterATK;
     [SerializeField] Text playerCritterDEF;
     [SerializeField] Text playerCritterSPD;
+    [SerializeField] Text playerCritters;
     [SerializeField] Image playerTurn;
     [Header("Enemy HUD")]
     [SerializeField] Text enemyCritterName;
@@ -21,6 +22,7 @@ public class HUDSystem : MonoBehaviour, IObserver
     [SerializeField] Text enemyCritterATK;
     [SerializeField] Text enemyCritterDEF;
     [SerializeField] Text enemyCritterSPD;
+    [SerializeField] Text enemyCritters;
     [SerializeField] Image enemyTurn;
 
 
@@ -86,7 +88,25 @@ public class HUDSystem : MonoBehaviour, IObserver
 
         if (value is string && notificationType == NotificationType.UpdateStatus)
         {
-            statusText.text = value.ToString();
+            statusText.text = value.ToString();           
+        }
+
+        if (notificationType == NotificationType.BattleWon)
+        {
+            Player player = value as Player;
+            statusText.text = $"{player.Name} ha ganado la batalla!";
+            enemyCritterName.text = "-";
+            enemyCritterHealth.text = "-";
+            enemyCritterATK.text = "-";
+            enemyCritterDEF.text = "-";
+            enemyCritterSPD.text = "-";
+            EndBattle();
+        }
+        if (value is BattleSystem && notificationType == NotificationType.UpdateHUD)
+        {
+            BattleSystem bs = value as BattleSystem;
+            playerCritters.text = $"Critters restantes: {bs.playerCritterStack.Count}";
+            enemyCritters.text = $"Critters restantes: {bs.enemyCritterStack.Count}";
         }
     }
 
@@ -130,8 +150,9 @@ public class HUDSystem : MonoBehaviour, IObserver
                 Critter critter2 = value2 as Critter;
                 statusText.text = $"{critter.Name} fue derrotado y {critter2.Name} toma su lugar en la batalla.";
             }
-
             break;
+
+
         }
         
         
@@ -175,6 +196,13 @@ public class HUDSystem : MonoBehaviour, IObserver
     {
         buttons.SetActive(true);
         playerTurn.enabled = true;
+        enemyTurn.enabled = false;
+    }
+
+    void EndBattle()
+    {
+        buttons.SetActive(false);
+        playerTurn.enabled = false;
         enemyTurn.enabled = false;
     }
 

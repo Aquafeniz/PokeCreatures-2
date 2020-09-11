@@ -9,9 +9,10 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+        public Transform collectionPos;
         public string Name { get; protected set; }
         public string _name;
-        public List<Critter> collection = new List<Critter>();
+        public List<GameObject> collection = new List<GameObject>();
 
         public List<GameObject> battleCritter;
 
@@ -22,8 +23,9 @@ public class Player : MonoBehaviour
             Name = _name;
             foreach (GameObject critter in battleCritter)
             {
-                critterStack.Push(critter);    
-                collection.Add(critter.GetComponent<Critter>());
+                GameObject instance = Instantiate(critter, collectionPos);
+                critterStack.Push(instance);
+                collection.Add(instance);
             }
         }
     }

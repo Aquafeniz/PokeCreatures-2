@@ -1,5 +1,53 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &592371365145686917
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2677537719171101859}
+  - component: {fileID: 4838941566379183949}
+  m_Layer: 0
+  m_Name: SupportSkill 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2677537719171101859
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592371365145686917}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4915023947441050532}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4838941566379183949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592371365145686917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d66356069a416d41a090beec462d3f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myCritter: {fileID: 4915023947441050535}
+  affinity: 4
+  suportSkillUsed: 0
+  Name: Atk Up
+  supportSkill: 0
 --- !u!1 &1018061937993110896
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,7 +187,7 @@ MonoBehaviour:
   myCritter: {fileID: 4915023947441050535}
   affinity: 0
   suportSkillUsed: 0
-  Name: 
+  Name: Def Up
   supportSkill: 1
 --- !u!1 &4915023947197206119
 GameObject:
@@ -187,8 +235,8 @@ MonoBehaviour:
   myCritter: {fileID: 4915023947441050535}
   affinity: 5
   suportSkillUsed: 0
-  Name: 
-  power: 0
+  Name: Ataque
+  power: 2
 --- !u!1 &4915023947441050533
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,7 +267,7 @@ Transform:
   m_Children:
   - {fileID: 4915023947197206113}
   - {fileID: 4915023946683740708}
-  - {fileID: 4915023948091091172}
+  - {fileID: 2677537719171101859}
   - {fileID: 20217285175164211}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -244,58 +292,10 @@ MonoBehaviour:
   moveSet:
   - {fileID: 4915023947197206118}
   - {fileID: 4915023946683740709}
-  - {fileID: 4915023948091091175}
+  - {fileID: 0}
   atkUpSkill: 0
   defUpSkill: 0
   spdDownSkill: 0
   maxHP: 175
   currentHP: 0
   isDefeated: 0
---- !u!1 &4915023948091091173
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4915023948091091172}
-  - component: {fileID: 4915023948091091175}
-  m_Layer: 0
-  m_Name: AttackSKill
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4915023948091091172
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4915023948091091173}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4915023947441050532}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4915023948091091175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4915023948091091173}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1246d95aae7bc554691be584a2330605, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myCritter: {fileID: 4915023947441050535}
-  affinity: 4
-  suportSkillUsed: 0
-  Name: 
-  power: 0

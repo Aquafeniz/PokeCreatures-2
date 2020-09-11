@@ -249,8 +249,8 @@ MonoBehaviour:
   myCritter: {fileID: 4672206385844827427}
   affinity: 2
   suportSkillUsed: 0
-  Name: 
-  power: 0
+  Name: Ataque
+  power: 6.6
 --- !u!1 &4672206387275918088
 GameObject:
   m_ObjectHideFlags: 0

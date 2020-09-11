@@ -14,10 +14,10 @@ public class BattleSystem : MonoBehaviour, ISubject
     [SerializeField] Transform playerBattlePos;
     [SerializeField] Transform enemyBattlePos;
 
-    Critter playerCritter;
-    Stack <GameObject> playerCritterStack; // Referencia a la pila de Critters de los jugadores únicamente para fácil acceso.
-    Critter enemyCritter;
-    Stack <GameObject> enemyCritterStack;
+    [SerializeField] Critter playerCritter;
+    public Stack <GameObject> playerCritterStack; // Referencia a la pila de Critters de los jugadores únicamente para fácil acceso.
+    [SerializeField] Critter enemyCritter;
+    public Stack <GameObject> enemyCritterStack;
 
     public BattleState state;
 
@@ -26,8 +26,7 @@ public class BattleSystem : MonoBehaviour, ISubject
         playerCritterStack = player.critterStack;
         enemyCritterStack = enemy.critterStack;
         RegisterObserver(HUDSystem.Instance.GetComponent<IObserver>());
-        SetupBattle();
-        
+        SetupBattle();        
     }
 
     public void RegisterObserver(IObserver observer) //Se suscriben los observadores interesados
@@ -41,16 +40,20 @@ public class BattleSystem : MonoBehaviour, ISubject
         playerCritter = playerCritterStack.Pop().GetComponent<Critter>();
         enemyCritter = enemyCritterStack.Pop().GetComponent<Critter>();        
 
-        playerCritter = Instantiate(playerCritter, playerBattlePos);
-        enemyCritter = Instantiate(enemyCritter, enemyBattlePos);
+        playerCritter.transform.position = playerBattlePos.position;
+        enemyCritter.transform.position = enemyBattlePos.position;
 
         Notify("Ha comenzado la batalla", NotificationType.UpdateStatus);
+        Notify(this, NotificationType.UpdateHUD);
         Invoke("CritterStatsChange", 0.5f);
-        if (playerCritter.RealSpeed > enemyCritter.RealSpeed) PlayerTurn();
+        if (playerCritter.RealSpeed > enemyCritter.RealSpeed)
+        {
+            Debug.Log("Empieza el jugador");
+            PlayerTurn();
+        } 
         else StartCoroutine("EnemyTurn");
 
-        state = BattleState.PlayerTurn;
-        //PlayerTurn();
+        //state = BattleState.PlayerTurn;
     }
 
     void PlayerTurn()
@@ -97,11 +100,16 @@ public class BattleSystem : MonoBehaviour, ISubject
         if (enemyCritter.isDefeated)
         {
             Critter oldCritter = enemyCritter;
+            enemy.collection.Remove(enemyCritter.gameObject);
+            player.collection.Add(enemyCritter.gameObject);
+            enemyCritter.transform.position = player.collectionPos.position;
+            enemyCritter.transform.parent = player.collectionPos;
+
             if (enemyCritterStack.Count > 0)
-            {
-                Destroy(enemyCritter.gameObject);
+            {                
                 NextEnemyCritter();       
-                Notify(oldCritter, enemyCritter, NotificationType.CritterDeath);    
+                Notify(oldCritter, enemyCritter, NotificationType.CritterDeath);
+                Notify(this, NotificationType.UpdateHUD);
                 StartCoroutine(EnemyTurn());
             }
             else
@@ -113,7 +121,7 @@ public class BattleSystem : MonoBehaviour, ISubject
         {
             StartCoroutine(EnemyTurn());
         }
-        CritterStatsChange(); 
+        if (state != BattleState.Won) CritterStatsChange(); 
     }
 
     void EnemyAction()
@@ -139,15 +147,16 @@ public class BattleSystem : MonoBehaviour, ISubject
         if (playerCritter.isDefeated)
         {
             Critter oldCritter = playerCritter;
-            enemy.collection.Add(playerCritter);
-            player.collection.Remove(playerCritter);
+            player.collection.Remove(playerCritter.gameObject);
+            enemy.collection.Add(playerCritter.gameObject);
+            playerCritter.transform.position = enemy.collectionPos.position;
+            playerCritter.transform.parent = enemy.collectionPos;
+
             if (playerCritterStack.Count > 0)
             {
-
-                Destroy(playerCritter.gameObject);
                 NextPlayerCritter();
-                Notify(oldCritter, playerCritter, NotificationType.CritterDeath);         
-                
+                Notify(oldCritter, playerCritter, NotificationType.CritterDeath);     
+                Notify(this, NotificationType.UpdateHUD);                
                 Invoke("PlayerTurn", 2f);
             }
             else
@@ -171,14 +180,14 @@ public class BattleSystem : MonoBehaviour, ISubject
     void NextEnemyCritter()
     {
         enemyCritter = enemyCritterStack.Pop().GetComponent<Critter>();
-        enemyCritter = Instantiate(enemyCritter, enemyBattlePos);
+        enemyCritter.transform.position = enemyBattlePos.position;
         Invoke("CritterStatsChange", 0.5f);
     }
 
     void NextPlayerCritter()
     {
         playerCritter = playerCritterStack.Pop().GetComponent<Critter>();
-        playerCritter = Instantiate(playerCritter, playerBattlePos);
+        playerCritter.transform.position = playerBattlePos.position;
         Notify(player, NotificationType.UpdateHUD);
         Invoke("CritterStatsChange", 0.5f);
     }
@@ -186,7 +195,7 @@ public class BattleSystem : MonoBehaviour, ISubject
     void BattleWon()
     {
         state = BattleState.Won;
-        Debug.Log(player.Name + " Ha ganado la batalla!");
+        Notify(player, NotificationType.BattleWon);
     }
 
     void BattleLost()

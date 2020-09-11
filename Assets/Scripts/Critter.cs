@@ -45,7 +45,7 @@ public class Critter : MonoBehaviour
         RealDefense = BaseDefense;
         RealSpeed = BaseSpeed;
         currentHP = maxHP;
-        //moveSet.Add(SkillFactory.CreateSuportSkill());
+        isDefeated = false;
     }   
 
     public void TakeDamage(float damage)
